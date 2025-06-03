@@ -7,6 +7,12 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+ <style>
+    .active{
+        background-color: #FF1F3D;
+        color: white;
+    }
+ </style>
  
 </head>
 <body>
@@ -15,8 +21,23 @@
             <div>
                 <img class="w-[120px]" src="Logo.png" alt="" srcset="">
              </div>
-            <div class="btn btn-soft  ">
-                Sort By View</div>
+            <div >
+                <label class="input">
+  <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g
+      stroke-linejoin="round"
+      stroke-linecap="round"
+      stroke-width="2.5"
+      fill="none"
+      stroke="currentColor"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.3-4.3"></path>
+    </g>
+  </svg>
+  <input id="search-input" type="search" required placeholder="Search" />
+</label>
+</div>
             <div class="btn btn-soft bg-[#FF1F3D] text-white hover:bg-red-600 ">Blogs</div>
         </nav>
     
@@ -25,17 +46,30 @@
     </header>
         <nav class="flex justify-center gap-8 py-4"  id="category-container" >
             <div>
-            <div class="btn btn-soft hover:bg-[#FF1F3D] hover:text-white">All</div>
+            <div id="btn-all" onclick="loadVideo()" class="btn btn-soft hover:bg-[#FF1F3D] hover:text-white">All</div>
             </div>
            
         </nav>
+        <section id="loading" class="mx-auto  justify-center text-center py-10 hidden">
+            <span class="loading loading-spinner text-error w-20 h-20"></span>
+
+        </section>
         <main id="video-container" class="w-11/12 mx-auto grid grid-cols-4 gap-4 py-10">
-            <div class="col-span-full flex flex-col text-center justify-center mx-auto items-center py-10">
+            <!-- <div class="col-span-full flex flex-col text-center justify-center mx-auto items-center py-10">
                 <img src="Icon.png" alt="" srcset="" class="w-38 py-5">
                 <h2 class="text-xl font-bold">Oops!! Sorry, There is no content here</h2>
-            </div>
+            </div> -->
 
         </main>
+        <dialog id="video_details" class="modal">
+     <div id="details-container">
+        
+     </div>
+
+</dialog>
+        <!-- Open the modal using ID.showModal() method -->
+<!-- <button class="btn" onclick="my_modal_1.showModal()">open modal</button> -->
+
         <script src="script/index.js"></script>
     
 </body>

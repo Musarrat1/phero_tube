@@ -1,312 +1,139 @@
-function loadCategory(){
-    // fetch data
+function loadCategory() {
     fetch('https://openapi.programming-hero.com/api/phero-tube/categories')
-    // convert promise to json
-    .then(res=>res.json())
-    // send data to display
-    .then((data)=>displayCategory(data.categories))
-
+        .then(res => res.json())
+        .then((data) => displayCategory(data.categories));
 }
 loadCategory();
-// category
-// : 
-// "Music"
-// category_id
-// : 
-// "1001"
-function displayCategory(categories){ 
-    const categoryContainer= document.getElementById("category-container")
-  for(let i of categories){
+const  showLoader=()=>{
+  document.getElementById("loading").classList.remove("hidden");
+  document.getElementById("video-container").classList.add("hidden");
 
-    //category create
-    const categoryDiv = document.createElement("div")
-    ;
-    categoryDiv.innerHTML=`
-     <div onclick="loadCategoryVideo(${i.category_id})" class="btn btn-soft hover:bg-[#FF1F3D]  hover:text-white">${i.category}</div>
-  `;
-  categoryContainer.append(categoryDiv);
 }
+const  hideLoader=()=>{
+  document.getElementById("loading").classList.add("hidden");
+  document.getElementById("video-container").classList.remove("hidden");
+
 }
-function loadVideo(){
-  fetch('https://openapi.programming-hero.com/api/phero-tube/videos')
-  .then(response=>response.json())
-  .then((data)=>displayVideos(data.videos))
+function displayCategory(categories) {
+    const categoryContainer = document.getElementById("category-container");
+    for (let i of categories) {
+        const categoryDiv = document.createElement("div");
+        categoryDiv.innerHTML = `
+        <div id="btn-${i.category_id}" onclick="loadCategoryVideo('${i.category_id}')" class="btn btn-soft hover:bg-[#FF1F3D] hover:text-white">${i.category}</div>
+        `;
+        categoryContainer.append(categoryDiv);
+    }
 }
-const loadCategoryVideo=(id)=>{
+
+function loadVideo(searchText = "") {
+  showLoader();
  
-  const url=`https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
-  console.log(url);
-  fetch(url)
-  .then(res=>res.json())
-  .then(data=>displayVideos(data.category));
-
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
+        .then(response => response.json())
+        .then((data) => {
+            removeActiveclass();
+            document.getElementById("btn-all").classList.add("active");
+            displayVideos(data.videos);
+        });
 }
-// [
-//     {
-//         "category_id": "1001",
-//         "video_id": "aaaa",
-//         "thumbnail": "https://i.ibb.co/L1b6xSq/shape.jpg",
-//         "title": "Shape of You",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/D9wWRM6/olivia.jpg",
-//                 "profile_name": "Olivia Mitchell",
-//                 "verified": ""
-//             }
-//         ],
-//         "others": {
-//             "views": "100K",
-//             "posted_date": "16278"
-//         },
-//         "description": "Dive into the rhythm of 'Shape of You,' a captivating track that blends pop sensibilities with vibrant beats. Created by Olivia Mitchell, this song has already gained 100K views since its release. With its infectious melody and heartfelt lyrics, 'Shape of You' is perfect for fans looking for an uplifting musical experience. Let the music take over as Olivia's vocal prowess and unique style create a memorable listening journey."
-//     },
-//     {
-//         "category_id": "1001",
-//         "video_id": "aaab",
-//         "thumbnail": "https://i.ibb.co/QPNzYVy/moonlight.jpg",
-//         "title": "Midnight Serenade",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/fDbPv7h/Noha.jpg",
-//                 "profile_name": "Noah Walker",
-//                 "verified": false
-//             }
-//         ],
-//         "others": {
-//             "views": "543K",
-//             "posted_date": ""
-//         },
-//         "description": "'Midnight Serenade' by Noah Walker is a soulful journey into the depths of the night, capturing the mystique and allure of a moonlit evening. With 543K views, this song brings together tender melodies and evocative lyrics, making it a favorite among listeners seeking a contemplative yet uplifting experience. Immerse yourself in this musical masterpiece and feel the calm embrace of the night."
-//     },
-//     {
-//         "category_id": "1003",
-//         "video_id": "aaac",
-//         "thumbnail": "https://i.ibb.co/NTncwqH/luahg-at-pain.jpg",
-//         "title": "Laugh at My Pain",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/XVHM7NP/kevin.jpg",
-//                 "profile_name": "Kevin Hart",
-//                 "verified": false
-//             }
-//         ],
-//         "others": {
-//             "views": "1.1K",
-//             "posted_date": "13885"
-//         },
-//         "description": "Comedian Kevin Hart brings his unique brand of humor to life in 'Laugh at My Pain.' With 1.1K views, this show offers a hilarious and candid look into Kevin's personal stories, struggles, and triumphs. It's a laugh-out-loud experience filled with sharp wit, clever insights, and a relatable charm that keeps audiences coming back for more."
-//     },
-//     {
-//         "category_id": "1001",
-//         "video_id": "aaad",
-//         "thumbnail": "https://i.ibb.co/f9FBQwz/smells.jpg",
-//         "title": "Smells Like Teen Spirit",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/k4tkc42/oliviar-harris.jpg",
-//                 "profile_name": "Oliver Harris",
-//                 "verified": true
-//             }
-//         ],
-//         "others": {
-//             "views": "5.4K",
-//             "posted_date": "1672656000"
-//         },
-//         "description": "'Smells Like Teen Spirit' by Oliver Harris captures the raw energy and rebellious spirit of youth. With over 5.4K views, this track brings a grunge rock vibe, featuring powerful guitar riffs and compelling vocals. Oliver's verified profile guarantees a quality musical journey that resonates with fans of dynamic, high-energy performances."
-//     },
-//     {
-//         "category_id": "1003",
-//         "video_id": "aaae",
-//         "thumbnail": "https://i.ibb.co/Yc4p5gD/inside-amy.jpg",
-//         "title": "Inside Amy Schumer",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/YD2mqH7/amy.jpg",
-//                 "profile_name": "Amy Schumer",
-//                 "verified": ""
-//             }
-//         ],
-//         "others": {
-//             "views": "3.6K",
-//             "posted_date": "15147"
-//         },
-//         "description": "'Inside Amy Schumer' is a comedy show by the popular comedian Amy Schumer, blending sharp satire and unfiltered humor to tackle everyday issues and societal norms. With 3.6K views, the show promises a blend of hilarious sketches, thought-provoking stand-up, and candid interviews. It's a must-watch for fans of bold, edgy comedy."
-//     },
-//     {
-//         "category_id": "1003",
-//         "video_id": "aaaf",
-//         "thumbnail": "https://i.ibb.co/5LRQkKF/stick-and-stones.jpg",
-//         "title": "Sticks & Stones",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/rdTZrCM/dev.jpg",
-//                 "profile_name": "Dave Chappelle",
-//                 "verified": true
-//             }
-//         ],
-//         "others": {
-//             "views": "113K",
-//             "posted_date": ""
-//         },
-//         "description": "Dave Chappelle's 'Sticks & Stones' has garnered 113K views and remains a controversial yet highly engaging piece of stand-up comedy. Known for his fearless approach, Dave dives into a wide range of topics, delivering his unique perspective with wit and sharp humor. As a verified artist, Dave's comedy is raw, honest, and unapologetically funny."
-//     },
-//     {
-//         "category_id": "1001",
-//         "video_id": "aaag",
-//         "thumbnail": "https://i.ibb.co/DRxB1Wm/sunris.jpg",
-//         "title": "Sunrise Reverie",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/yQFJ42h/ava.jpg",
-//                 "profile_name": "Ava Johnson",
-//                 "verified": false
-//             }
-//         ],
-//         "others": {
-//             "views": "1.1K",
-//             "posted_date": "16950"
-//         },
-//         "description": "'Sunrise Reverie' by Ava Johnson takes listeners on a serene journey through tranquil melodies and soft harmonies. With 1.1K views, this track is perfect for morning relaxation or an evening wind-down. Ava's heartfelt lyrics and soothing voice create a sense of peace, making it a go-to for fans seeking calm and inspiration in their musical choices."
-//     },
-//     {
-//         "category_id": "1001",
-//         "video_id": "aaah",
-//         "thumbnail": "https://i.ibb.co/hY496Db/coloer-of-the-wind.jpg",
-//         "title": "Colors of the Wind",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/6r4cx4P/ethen-clack.png",
-//                 "profile_name": "Ethan Clark",
-//                 "verified": true
-//             }
-//         ],
-//         "others": {
-//             "views": "233K",
-//             "posted_date": "16090"
-//         },
-//         "description": "Ethan Clark's 'Colors of the Wind' is a vibrant musical exploration that captivates listeners with its rich, expressive melodies and uplifting rhythm. With 233K views, this song is a celebration of nature's beauty and human connection, offering a soothing and enriching experience for fans of heartfelt, nature-inspired music."
-//     },
-//     {
-//         "category_id": "1003",
-//         "video_id": "aaai",
-//         "thumbnail": "https://i.ibb.co/kc8CCFs/30-rock.png",
-//         "title": "30 Rock",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/YZN9rQZ/tina.jpg",
-//                 "profile_name": "Tina Fey",
-//                 "verified": false
-//             }
-//         ],
-//         "others": {
-//             "views": "4.5K",
-//             "posted_date": "14800"
-//         },
-//         "description": "'30 Rock,' led by Tina Fey, is a comedy series that has garnered 4.5K views. The show is a witty and humorous take on the behind-the-scenes antics of a fictional live comedy show. With its sharp writing and unforgettable characters, '30 Rock' is perfect for fans of smart, satirical humor and engaging storylines."
-//     },
-//     {
-//         "category_id": "1003",
-//         "video_id": "aaaj",
-//         "thumbnail": "https://i.ibb.co/xgWL3vQ/kid-gorgeous.jpg",
-//         "title": "Kid Gorgeous",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/xsfkwN2/john.jpg",
-//                 "profile_name": "John Mulaney",
-//                 "verified": true
-//             }
-//         ],
-//         "others": {
-//             "views": "241K",
-//             "posted_date": ""
-//         },
-//         "description": "John Mulaney's 'Kid Gorgeous' has captured the hearts of many with 241K views. As a verified comedian, John delivers a masterclass in stand-up with clever anecdotes, quick wit, and relatable humor. This performance is a laugh-filled adventure through his unique take on life, politics, and pop culture."
-//     },
-//     {
-//         "category_id": "1003",
-//         "video_id": "aaak",
-//         "thumbnail": "https://i.ibb.co/ZNggzdm/cake.jpg",
-//         "title": "Beyond The Pale",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/MZ2vbXR/jimm.jpg",
-//                 "profile_name": "Jim Gaffigan",
-//                 "verified": false
-//             }
-//         ],
-//         "others": {
-//             "views": "2.6K",
-//             "posted_date": "15400"
-//         },
-//         "description": "'Beyond The Pale' by Jim Gaffigan, with 2.6K views, is a comedic gem that explores everyday observations and family life with a light-hearted and witty approach. Jim's humor is accessible and delightful, making this show perfect for anyone who enjoys clean, observational comedy."
-//     },
-//     {
-//         "category_id": "1001",
-//         "video_id": "aaal",
-//         "thumbnail": "https://i.ibb.co/hdtZYbB/enchnting.jpg",
-//         "title": "Enchanted Harmonies",
-//         "authors": [
-//             {
-//                 "profile_picture": "https://i.ibb.co/jh1q2F3/shopia.jpg",
-//                 "profile_name": "Sophia Williams",
-//                 "verified": false
-//             }
-//         ],
-//         "others": {
-//             "views": "7.6K",
-//             "posted_date": "16450"
-//         },
-//         "description": "'Enchanted Harmonies' by Sophia Williams enchants listeners with its delicate, soothing sounds and melodic complexity. Garnering 7.6K views, this piece is perfect for those seeking an immersive musical experience that blends elegance with emotion, offering a unique soundscape that resonates deeply with its audience."
-//     }
-// ]
-// loadVideo()
-const displayVideos=(videos)=>{
-const videoContainer = document.getElementById("video-container");
-videoContainer.innerHTML=" "
-if(videos.length==0){
-  videoContainer.innerHTML=`   <div class="col-span-full flex flex-col text-center justify-center mx-auto items-center py-10">
-                <img src="Icon.png" alt="" srcset="" class="w-38 py-5">
-                <h2 class="text-xl font-bold">Oops!! Sorry, There is no content here</h2>
-            </div>
-`
-  return ;
-}
-videos.forEach(
-  (video)=>{
-     console.log(video);
-    const videoCard=document.createElement("div")
-    videoCard.innerHTML=`
-       <div class="card bg-base-100  ">
-  <figure class="relative">
-    <img class="w-full h-[180px] object-cover"
-      src="${video.thumbnail}"
-      alt="Shoes" />
-      <span class="absolute bottom-2 right-2 bg-black text-white px-1.5 py-1 rounded-md text-sm">3hrs 56 min ago</span>
-  </figure>
-  <div class=" flex gap-3 px-0 py-4">
-    <div>
-  <div class="avatar">
-  <div class="ring-primary ring-offset-base-100 w-8 rounded-full">
-    <img src="${video.authors[0].profile_picture}" />
-  </div>
-</div>
-</div>
-  <div class="intro">
-    <h1 class="text-md font-bold ">${video.title}</h1>
 
-    <p class="text-gray-400 flex gap-1">${video.authors[0].profile_name}
-    <img class="w-5 h-5" src="https://img.icons8.com/?size=100&id=98A4yZTt9abw&format=png&color=000000" alt="" srcset="">
-    </p>
-    <small class="text-gray-400">
-        ${video.others.views}
-    </small>
-  </div>
-  </div>
-</div>`;
-    videoContainer.append(videoCard);
+// ✅ FIXED: Added the keyup listener just once — outside of the function
+document.getElementById('search-input').addEventListener("keyup", (e) => {
+    const input = e.target.value;
+    loadVideo(input);
+});
 
-  });
-
+const loadCategoryVideo = (id) => {
+  showLoader();
+    const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            removeActiveclass();
+            const clickButton = document.getElementById(`btn-${id}`);
+            clickButton.classList.add("active");
+            displayVideos(data.category);
+        });
 };
 
+const loadVideoDetails = (videoId) => {
+    const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => displayVideoDetails(data.video));
+};
 
+const displayVideoDetails = (video) => {
+    document.getElementById("video_details").showModal();
+    const detailsContainer = document.getElementById("details-container");
+    detailsContainer.innerHTML = `
+    <div class="card bg-base-100 image-full shadow-sm">
+        <figure><img src="${video.thumbnail}" alt="Shoes" /></figure>
+        <div class="card-body">
+            <h2 class="card-title">${video.title}</h2>
+            <p>${video.authors[0].profile_name} 
+            ${video.authors[0].verified ?
+            `<img class="w-5 h-5" src="https://img.icons8.com/?size=100&id=98A4yZTt9abw&format=png&color=000000"/>`
+            : ""}
+            </p>
+            <div class="card-actions justify-end">
+                <button onclick="location.href='index.html'" class="btn">Close</button>
+            </div>
+        </div>
+    </div>
+    `;
+};
+
+function removeActiveclass() {
+    const activeButtons = document.getElementsByClassName("active");
+    for (let btn of activeButtons) {
+        btn.classList.remove("active");
+    }
+}
+
+const displayVideos = (videos) => {
+    const videoContainer = document.getElementById("video-container");
+    videoContainer.innerHTML = "";
+    if (videos.length === 0) {
+        videoContainer.innerHTML = `
+            <div class="col-span-full flex flex-col text-center justify-center mx-auto items-center py-10">
+                <img src="Icon.png" alt="no data" class="w-38 py-5">
+                <h2 class="text-xl font-bold">Oops!! Sorry, There is no content here</h2>
+            </div>
+        `;
+            hideLoader();
+        return;
+    
+    }
+
+    videos.forEach((video) => {
+        const isVerified = video.authors[0].verified;
+        const videoCard = document.createElement("div");
+        videoCard.innerHTML = `
+        <div class="card bg-base-100">
+            <figure class="relative">
+                <img class="w-full h-[180px] object-cover" src="${video.thumbnail}" alt="Shoes" />
+                <span class="absolute bottom-2 right-2 bg-black text-white px-1.5 py-1 rounded-md text-sm">3hrs 56 min ago</span>
+            </figure>
+            <div class="flex gap-3 px-0 py-4">
+                <div class="avatar">
+                    <div class="ring-primary ring-offset-base-100 w-8 h-8 rounded-full">
+                        <img src="${video.authors[0].profile_picture}" />
+                    </div>
+                </div>
+                <div class="intro">
+                    <h1 class="text-md font-bold">${video.title}</h1>
+                    <p class="text-gray-400 flex items-center gap-1">
+                        ${video.authors[0].profile_name}
+                        ${isVerified ? `<img class="w-5 h-5" src="https://img.icons8.com/?size=100&id=98A4yZTt9abw&format=png&color=000000" />` : ""}
+                    </p>
+                    <small class="text-gray-400">${video.others.views}</small>
+                </div>
+            </div>
+            <button onclick="loadVideoDetails('${video.video_id}')" class="btn btn-block">Show Details</button>
+        </div>
+        `;
+        videoContainer.append(videoCard);
+         hideLoader();
+    });
+};
