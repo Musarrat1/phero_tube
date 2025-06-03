@@ -22,7 +22,7 @@ function displayCategory(categories){
     const categoryDiv = document.createElement("div")
     ;
     categoryDiv.innerHTML=`
-     <div class="btn btn-soft hover:bg-[#FF1F3D]  hover:text-white">${i.category}</div>
+     <div onclick="loadCategoryVideo(${i.category_id})" class="btn btn-soft hover:bg-[#FF1F3D]  hover:text-white">${i.category}</div>
   `;
   categoryContainer.append(categoryDiv);
 }
@@ -31,6 +31,15 @@ function loadVideo(){
   fetch('https://openapi.programming-hero.com/api/phero-tube/videos')
   .then(response=>response.json())
   .then((data)=>displayVideos(data.videos))
+}
+const loadCategoryVideo=(id)=>{
+ 
+  const url=`https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
+  console.log(url);
+  fetch(url)
+  .then(res=>res.json())
+  .then(data=>displayVideos(data.category));
+
 }
 // [
 //     {
@@ -250,9 +259,18 @@ function loadVideo(){
 //         "description": "'Enchanted Harmonies' by Sophia Williams enchants listeners with its delicate, soothing sounds and melodic complexity. Garnering 7.6K views, this piece is perfect for those seeking an immersive musical experience that blends elegance with emotion, offering a unique soundscape that resonates deeply with its audience."
 //     }
 // ]
-loadVideo()
+// loadVideo()
 const displayVideos=(videos)=>{
 const videoContainer = document.getElementById("video-container");
+videoContainer.innerHTML=" "
+if(videos.length==0){
+  videoContainer.innerHTML=`   <div class="col-span-full flex flex-col text-center justify-center mx-auto items-center py-10">
+                <img src="Icon.png" alt="" srcset="" class="w-38 py-5">
+                <h2 class="text-xl font-bold">Oops!! Sorry, There is no content here</h2>
+            </div>
+`
+  return ;
+}
 videos.forEach(
   (video)=>{
      console.log(video);
